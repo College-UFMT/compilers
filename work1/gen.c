@@ -1,10 +1,9 @@
 /**
  * @file gen.c
- * @author Ivairton M. Santos - UFMT - Computacao
+ * @author kaio-nink & Ivairton M. Santos
+ * @date Sat Dec 11 2021
  * @brief Codificacao do modulo gerador de codigo
- * @version 0.1
- * @date 2021-11-24
- * 
+ *
  */
 
 // Inclusao do cabecalho
@@ -32,6 +31,27 @@ void genSub() {
     printf("push rax\n");
 }
 
+/**
+ * @brief Funcao que gera codigo de montagem para MULTIPLICACAO
+ * 
+ */
+void genMult(){
+    printf("pop rax\n");
+    printf("pop rbx\n");
+    printf("mult rax,rbx\n");
+    printf("push rax\n");
+}
+
+/**
+ * @brief Funcao que gera codigo de montagem para DIVISAO
+ * 
+ */
+void genDiv(){
+    printf("pop rax\n");
+    printf("pop rbx\n");
+    printf("div rax,rbx\n");
+    printf("push rax\n");
+}
 
 /**
  * @brief Funcao que gera codigo de montagem para armazenamento de NUMERAL

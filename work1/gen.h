@@ -1,11 +1,11 @@
 /**
- * @file gen.h
- * @author Ivairton M. Santos - UFMT - Computacao
+ * @file gen.c
+ * @author kaio-nink & Ivairton M. Santos
+ * @date Sat Dec 11 2021
  * @brief Modulo do gerador de codigo
- * @version 0.1
- * @date 2021-11-24
- * 
+ *
  */
+
 #ifndef _GEN_H_
 #define _GEN_H_
 
@@ -19,6 +19,8 @@
 // Prototipos
 void genAdd();
 void genSub();
+void genMult();
+void genDiv();
 void genNum(char num_string[MAX_TOKEN]);
 
 #endif //_GEN_H_
