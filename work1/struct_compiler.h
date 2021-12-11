@@ -1,13 +1,11 @@
 /**
- * @file struct_compiler.h
- * @author Prof. Ivairton M. Santos - UFMT - Computacao
- * @brief Modulo para definicao de constantes e estruturas de dados do Sistema
- *        Compilador de C Simplificado
- * @version 0.1
- * @date 2021-11-24
- * 
+ * @file gen.c
+ * @author kaio-nink & Ivairton M. Santos
+ * @date Sat Dec 11 2021
+ * @brief Modulo para definicao de constantes 
+ * e estruturas de dados do Sistema Compilador de C Simplificado 
+ *
  */
-
 #ifndef _STRUCT_COMPILER_
 #define _STRUCT_COMPILER_
 
@@ -24,6 +22,11 @@
 #define NUM 1
 #define PLUS '+'
 #define MINUS '-'
+//Definicao de codigos para multiplicacao, divisao e parenteses
+#define MULT '*'
+#define DIV '/'
+#define PAROPEN '('
+#define PARCLOSE ')'
 
 // Definicao da estrutura de dados 'token'
 struct st_token {
