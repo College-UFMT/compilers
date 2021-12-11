@@ -1,10 +1,9 @@
 /**
- * @file synt.h
- * @author Prof. Ivairton M. Santos - UFMT - Computacao
- * @brief Modulo do analisado sintatico
- * @version 0.1
- * @date 2021-11-24
- * 
+ * @file gen.c
+ * @author kaio-nink & Ivairton M. Santos
+ * @date Sat Dec 11 2021
+ * @brief Modulo do analisador sintatico
+ *
  */
 
 #ifndef _SYNT_H_
@@ -23,10 +22,15 @@
 type_token *lookahead;
 
 // Prototipos
-int list();
-int listR();
 int digit();
 int match(int token_tag);
+
+// Prototipos da gramatica
+int E();
+int ER();
+int T();
+int TR();
+int F(); 
 
 int main();
 

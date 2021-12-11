@@ -1,10 +1,9 @@
 /**
- * @file synt.c
- * @author Prof. Ivairton M. Santos - UFMT - Computacao
- * @brief Codificacao do modulo do analisador sintatico
- * @version 0.1
- * @date 2021-11-24
- * 
+ * @file gen.c
+ * @author kaio-nink & Ivairton M. Santos
+ * @date Sat Dec 11 2021
+ * @brief Codificacao do modulo do analisador lexico
+ *
  */
 
 // Inclusao do cabecalho
@@ -25,49 +24,6 @@ int match(int token_tag) {
 }
 
 /**
- * @brief Regra de derivacao da gramatica: LIST
- * 
- * @return int true/false
- */
-int list() {
-    if ( digit() && listR() ) 
-        return true;
-    return false;
-}
-
-/**
- * @brief Regra de derivacao da gramatica: LIST_RECURSIVO
- * 
- * @return int true/false
- */
-int listR() {
-    int test1, test2;
-    //Verifica ocorrencia de terminal '+'
-    if ( lookahead->tag == PLUS ) {
-        test1 = match(PLUS);
-        test2 = digit();
-        genAdd(); //Geracao de codigo por meio de funcao do GERADOR
-        if (test1 && test2)
-            return listR();
-        return false;
-    } //Verifica ocorrencia de terminal '-' 
-    else if ( lookahead->tag == MINUS ) {
-        test1 = match(MINUS);
-        test2 = digit();
-        genSub(); //Geracao de codigo por meio de funcao do GERADOR
-        if (test1 && test2)
-            return listR();
-        return false;
-    } //Verifica se fim de entrada
-    else {
-        if ( lookahead->tag == ENDTOKEN )
-            return true;
-        //Caso todos os testes falhem, retorna erro (false)
-        return false; 
-    }
-}
-
-/**
  * @brief Regra de derivacao da gramatica: DIGIT
  * 
  * @return int true/false
@@ -83,7 +39,130 @@ int digit() {
     return false;
 }
 
+/**
+ * @brief Regra de derivacao da gramatica: E->TE'
+ * 
+ * @return int true/false 
+ */
+int E() {
+    int test1, test2;
+    test1 = T();
+    if (test1) {
+        test2 = ER();
+    }
+    return test1 && test2;
+}
 
+/**
+ * @brief Regra de derivacao da gramatica: E'->+TE' | E'-> -TE'| vazio
+ * 
+ * @return int true/false 
+ */
+int ER() {
+    int test1, test2;
+    //Verificacao para PLUS (+)
+    if ( lookahead->tag == PLUS ) {
+        match(PLUS);
+        test1 = T();
+        if (test1)
+            test2 = ER();
+        genAdd();
+        return test1 && test2;
+    //Verificacao para MINUS (-)
+    } else if ( lookahead->tag == MINUS ) {
+        match(MINUS);
+        test1 = T();
+        if(test1)
+            test2 = ER();
+        genSub();
+        return test1 && test2;
+    } 
+    //Verificacao para PARCLOSE (')')
+    else if ( lookahead->tag == PARCLOSE ) {
+        return true;
+    //Verificacao para ENDTOKEN ('\0')
+    } else if ( match(ENDTOKEN) ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * @brief Regra de derivacao da gramatica: T->FT'
+ * 
+ * @return int true/false 
+ */
+int T() {
+    int test1, test2;
+    test1 = F();
+    if (test1)
+        test2 = TR();
+    return test1 && test2;
+}
+
+/**
+ * @brief Regra de derivacao da gramatica: TR->*FT' | TR->/FT' | vazio
+ * 
+ * @return int true/false 
+ */
+int TR() {
+    int test1, test2;
+    //Verificacao para MULT (*)
+    if ( lookahead->tag == MULT ) {
+        match(MULT);
+        test1 = F();
+        if (test1)
+            test2 = TR();
+        genMult();
+        return test1 && test2;
+    //Verificacao para DIV (/)
+    } else if( lookahead->tag == DIV) {
+        match(DIV);
+        test1 = F();
+        if(test1)
+            test2 = TR();
+        genDiv();
+        return test1 && test2;
+    }
+    //Verificacao para PARCLOSE (')')
+    else if ( lookahead->tag == PARCLOSE) {
+        return true;
+    } //Verificacao para ENDTOKEN ('\0')
+    else if ( match(ENDTOKEN) ) {
+        return true;
+    } //Verificacao para PLUS (+)
+    else if ( lookahead->tag == PLUS) {
+        return true;
+    } //Verificacao para MINUS (-)
+    else if ( lookahead->tag == MINUS){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * @brief Regra de derivacao da gramatica: F->(E)
+ * 
+ * @return int true/false 
+ */
+int F() {
+    if ( lookahead->tag == PAROPEN ) {
+        int test1, test2;
+        match(PAROPEN);
+        test1 = E();
+        if (test1)
+            test2 = match(PARCLOSE);
+        return test1 && test2;
+    } else if ( digit() ) {
+        //Aqui iremos editar no futuro para processar o digito (a partir do lexico) e gerar codigo
+        
+        return true;
+    } else {
+        return false;
+    }
+}
 
 /**
  * @brief Funcao principal (main) do compilador
@@ -98,7 +177,7 @@ int main() {
     initLex(); //Carrega codigo
     lookahead = getToken(); //Inicializacao do lookahead
 
-    acept = list(); //Chamada da derivacao/funcao inicial da gramatica
+    acept = E(); //Chamada da derivacao/funcao inicial da gramatica: E()
 
     //Verifica aceitacao da cadeia/codigo
     if (acept) {
