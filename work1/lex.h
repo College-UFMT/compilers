@@ -1,10 +1,9 @@
 /**
- * @file lex.h
- * @author Prof. Ivairton M. Santos
+ * @file gen.c
+ * @author kaio-nink & Ivairton M. Santos
+ * @date Sat Dec 11 2021
  * @brief Modulo do analisador lexico
- * @version 0.1
- * @date 2021-11-24
- * 
+ *
  */
 
 #ifndef _LEX_H_

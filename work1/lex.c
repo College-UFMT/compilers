@@ -1,12 +1,10 @@
 /**
- * @file lex.c
- * @author Prof. Ivairton M. Santos - UFMT - Computacao
+ * @file gen.c
+ * @author kaio-nink & Ivairton M. Santos
+ * @date Sat Dec 11 2021
  * @brief Codificacao do modulo do analisador lexico
- * @version 0.1
- * @date 2021-11-24
- * 
+ *
  */
-
 // Inclusao do cabecalho
 #include "lex.h"
 
@@ -60,6 +58,30 @@ type_token *getToken() {
         token->tag = MINUS;
         strcpy(token->lexema, "-");
         pos++;
+    }
+    //Verifica se MULT (*) 
+    else if (string[pos] == MULT) {
+       token->tag = MULT;
+       strcpy(token->lexema, "*");
+       pos++;
+    }
+    //Verifica se DIV (/)
+    else if (string[pos] == DIV) {
+       token->tag = DIV;
+       strcpy(token->lexema, "/");
+       pos++;
+    }
+    //Verifica se PAROPEN ('(')
+    else if (string[pos] == PAROPEN) {
+       token->tag = PAROPEN;
+       strcpy(token->lexema, "(");
+       pos++;
+    }
+    //Verifica se PARCLOSE (')')
+    else if (string[pos] == PARCLOSE) {
+       token->tag = PARCLOSE;
+       strcpy(token->lexema, ")");
+       pos++;
     }
     //Verifica se FIM DE CADEIA
     else if (string[pos] == ENDTOKEN) {
