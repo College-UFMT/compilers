@@ -1,6 +1,6 @@
 /**
  * @file gen.c
- * @author Ivairton M. Santos - UFMT - Computacao
+ * @author Kaio Felipe Nink Cardoso && Fillipe Augusto de Siqueira Gomes
  * @brief Codificacao do modulo gerador de codigo
  * @version 0.3
  * @date 2022-04-25
@@ -18,6 +18,4 @@
 void newTemp(char label[32]) {
     static int label_count = 0;
     sprintf(label, "t%d", label_count++);
-    printf("%s",label);
-
 }

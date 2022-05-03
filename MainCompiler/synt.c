@@ -1,9 +1,9 @@
 /**
  * @file synt.c
- * @author Prof. Ivairton M. Santos - UFMT - Computacao
+ * @author Kaio Felipe Nink Cardoso && Fillipe Augusto de Siqueira Gomes
  * @brief Codificacao do modulo do analisador sintatico COM GERACAO DE CODIGO INTERMEDIARIO
  * @version 0.3
- * @date 2022-04-25
+ * @date 2022-05-03
  *
  */
 
@@ -61,10 +61,8 @@ int E(type_code *e_code)
   er_code = (type_code *)malloc(sizeof(type_code));
 
   newTemp(e_code->temp);
-  // printf("%s",e_code->temp);
   
   test1 = T(t_code);
-  // printf("%s",t_code->temp);
 
   if (test1){
     test2 = ER(last_operation, er_code);
@@ -190,6 +188,8 @@ int T(type_code *tCode)
 
   strcpy(tCode->code, fCode->code);
   strcpy(tCode->code, trCode->code);
+
+  return b1 && b2;
 }
 
 /**
