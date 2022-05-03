@@ -1,6 +1,6 @@
 /**
  * @file gen.h
- * @author Ivairton M. Santos - UFMT - Computacao
+ * @author Kaio Felipe Nink Cardoso && Fillipe Augusto de Siqueira Gomes
  * @brief Modulo do gerador de codigo
  * @version 0.3
  * @date 2022-04-25

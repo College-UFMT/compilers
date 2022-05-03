@@ -1,6 +1,6 @@
 /**
  * @file lex.c
- * @author Prof. Ivairton M. Santos - UFMT - Computacao
+ * @author Kaio Felipe Nink Cardoso && Fillipe Augusto de Siqueira Gomes
  * @brief Codificacao do modulo do analisador lexico
  * @version 0.3
  * @date 2022-04-25

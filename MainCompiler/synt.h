@@ -1,6 +1,6 @@
 /**
  * @file synt.h
- * @author Prof. Ivairton M. Santos - UFMT - Computacao
+ * @author Kaio Felipe Nink Cardoso && Fillipe Augusto de Siqueira Gomes
  * @brief Modulo do analisado sintatico
  * @version 0.3
  * @date 2022-04-25

@@ -1,6 +1,6 @@
 /**
  * @file lex.h
- * @author Prof. Ivairton M. Santos
+ * @author Kaio Felipe Nink Cardoso && Fillipe Augusto de Siqueira Gomes
  * @brief Modulo do analisador lexico
  * @version 0.3
  * @date 2022-04-25
