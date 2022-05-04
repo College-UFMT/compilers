@@ -18,6 +18,7 @@
 void initLex() {
     printf("Informe uma expressao para ser avaliada:");
     fgets(string,MAX_CHAR,stdin);
+    // strcpy(string,"4*4-3/1*3");
 }
 
 /**

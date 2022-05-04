@@ -49,7 +49,7 @@ int match(int token_tag)
  *
  * @return int true/false
  */
-int E(type_code *e_code)
+int E(type_code *eCode)
 {
   int test1, test2;
   type_code *t_code;
@@ -60,7 +60,7 @@ int E(type_code *e_code)
   t_code = (type_code *)malloc(sizeof(type_code));
   er_code = (type_code *)malloc(sizeof(type_code));
 
-  newTemp(e_code->temp);
+  newTemp(eCode->temp);
   
   test1 = T(t_code);
 
@@ -68,30 +68,35 @@ int E(type_code *e_code)
     test2 = ER(last_operation, er_code);
   }
 
-  strcpy(e_code->code, t_code->code);
-  test2 = ER(last_operation, er_code);
+  // strcpy(eCode->code, t_code->code);
+  // test2 = ER(last_operation, er_code);
 
-  strcpy(e_code->code, t_code->code);
-  strcat(e_code->code, er_code->code);
+  strcpy(eCode->code, t_code->code);
+  strcat(eCode->code, er_code->code);
 
   switch (*last_operation)
   {
   case '+':
-    strcat(e_code->code, e_code->temp);
-    strcat(e_code->code, "=");
-    strcat(e_code->code, t_code->temp);
-    strcat(e_code->code, "+");
-    strcat(e_code->code, er_code->temp);
+    strcat(eCode->code, eCode->temp);
+    strcat(eCode->code, "=");
+    strcat(eCode->code, t_code->temp);
+    strcat(eCode->code, "+");
+    strcat(eCode->code, er_code->temp);
+    strcat(eCode->code, "\n");
     break;
   case '-':
-    strcat(e_code->code, e_code->temp);
-    strcat(e_code->code, "=");
-    strcat(e_code->code, t_code->temp);
-    strcat(e_code->code, "-");
-    strcat(e_code->code, er_code->temp);
+    strcat(eCode->code, eCode->temp);
+    strcat(eCode->code, "=");
+    strcat(eCode->code, t_code->temp);
+    strcat(eCode->code, "-");
+    strcat(eCode->code, er_code->temp);
+    strcat(eCode->code, "\n");
     break;
   case '\0':
-    printf("[ERRO] Operacao nao definida!\n");
+    strcat(eCode->code, eCode->temp);
+    strcat(eCode->code, "=");
+    strcat(eCode->code, t_code->temp);
+    strcat(eCode->code, "\n");
     break;
   }
 
@@ -118,43 +123,33 @@ int ER(int *lastOperation, type_code *erCode)
     int b1, b2;
     match('+');
     *lastOperation = (int)'+';
+
     b1 = T(tCode);
     strcpy(erCode->temp, tCode->temp);
     if (b1)
       b2 = ER(lOperation, er1Code);
+
     strcpy(erCode->code, tCode->code);
-    strcpy(erCode->code, er1Code->code);
+    strcat(erCode->code, er1Code->code);
+
     return b1 && b2;
   }
   else if (lookahead->tag == '-') {
     int b1, b2;
     match('-');
     *lastOperation = (int) '-';
+
     b1 = T(tCode);
     strcpy(erCode->temp, tCode->temp);
     if (b1)
       b2 = ER(lOperation, er1Code);
+
     strcpy(erCode->code, tCode->code);
-    strcpy(erCode->code, er1Code->code);
+    strcat(erCode->code, er1Code->code);
+
     return b1 && b2;
   } 
-  else if (lookahead->tag == ')') {
-    strcpy(erCode->code, "\0");
-    return true;
-  }
-  else if (lookahead->tag == ENDTOKEN)
-  {
-    strcpy(erCode->temp, "");
-    (*lastOperation) = '\0';
-    return true;
-  }
-  else if (lookahead->tag == '*')
-  {
-    strcpy(erCode->temp, "");
-    (*lastOperation) = '\0';
-    return true;
-  }
-  else if (lookahead->tag == ENDTOKEN)
+  else if (lookahead->tag == ENDTOKEN || lookahead->tag == '*' || lookahead->tag == '/' || lookahead->tag == OPEN_PAR || lookahead->tag == CLOSE_PAR)
   {
     strcpy(erCode->temp, "");
     (*lastOperation) = '\0';
@@ -187,8 +182,32 @@ int T(type_code *tCode)
     b2 = TR(lastOperation, trCode);
 
   strcpy(tCode->code, fCode->code);
-  strcpy(tCode->code, trCode->code);
+  strcat(tCode->code, trCode->code);
 
+  switch(*lastOperation) {
+    case '*':
+        strcat(tCode->code, tCode->temp);
+        strcat(tCode->code, "=");
+        strcat(tCode->code, fCode->temp);
+        strcat(tCode->code, "*");
+        strcat(tCode->code, trCode->temp);
+        strcat(tCode->code, "\n");
+    break;
+    case '/':
+        strcat(tCode->code, tCode->temp);
+        strcat(tCode->code, "=");
+        strcat(tCode->code, fCode->temp);
+        strcat(tCode->code, "/");
+        strcat(tCode->code, trCode->temp);
+        strcat(tCode->code, "\n");
+    break;
+    case '\0':
+        strcat(tCode->code, tCode->temp);
+        strcat(tCode->code, "=");
+        strcat(tCode->code, fCode->temp);
+        strcat(tCode->code, "\n");
+    break;
+  }
   return b1 && b2;
 }
 
@@ -212,48 +231,40 @@ int TR(int *lastOperation, type_code *trCode)
     int b1, b2;
     match('*');
     *lastOperation = (int)'*';
+    
     b1 = F(fCode);
     strcpy(trCode->temp, fCode->temp);
+   
     if (b1)
       b2 = TR(lOperation, tr1Code);
-    strcpy(trCode->code, fCode->code);
-    strcpy(trCode->code, tr1Code->code);
+   
+    strcat(trCode->code, fCode->code);
+    strcat(trCode->code, tr1Code->code);
+   
     return b1 && b2;
   }
   else if (lookahead->tag == '/') {
     int b1, b2;
     match('/');
     *lastOperation = (int) '/';
+
     b1 = F(fCode);
     strcpy(trCode->temp, fCode->temp);
+
     if (b1)
       b2 = TR(lOperation, tr1Code);
-    strcpy(trCode->code, fCode->code);
-    strcpy(trCode->code, tr1Code->code);
+
+    strcat(trCode->code, fCode->code);
+    strcat(trCode->code, tr1Code->code);
     return b1 && b2;
   } 
-  else if (lookahead->tag == ENDTOKEN)
+  else if (lookahead->tag == ENDTOKEN || lookahead->tag == '+' || lookahead->tag == '-' || lookahead->tag == OPEN_PAR || lookahead->tag == CLOSE_PAR)
   {
     strcpy(trCode->temp, "");
     (*lastOperation) = '\0';
     return true;
   }
-  else if (lookahead->tag == '+')
-  {
-    strcpy(trCode->temp, "");
-    (*lastOperation) = '\0';
-    return true;
-  }
-  else if (lookahead->tag == ENDTOKEN)
-  {
-    strcpy(trCode->temp, "");
-    (*lastOperation) = '\0';
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+  return false;
 
 }
 
@@ -264,36 +275,38 @@ int TR(int *lastOperation, type_code *trCode)
  */
 int F(type_code *fCode)
 {
-  type_code *eCode;
-  eCode = (type_code *)malloc(sizeof(type_code));
-  if (lookahead->tag == '(')
+  if (lookahead->tag == OPEN_PAR)
   {
-    int b1, b2;
-    match('(');
-    b1 = E(eCode);
-    if (b1)
-      b2 = match(')');
+    int test1, test2;
+    type_code *eCode;
+    eCode = (type_code *)malloc(sizeof(type_code));
+  
+    match(OPEN_PAR);
+    test1 = E(eCode);
+    if (test1)
+      test2 = match(CLOSE_PAR);
+
     strcpy(fCode->temp, eCode->temp);
     strcpy(fCode->code, eCode->code);
-    return b1 && b2;
+    return test1 && test2;
   }
   else if (lookahead->tag == NUM)
   {
-    int b1;
+    int token;
     char lexema[MAX_TOKEN];
+
     strcpy(lexema, lookahead->lexema);
-    b1 = match(NUM);
+    token = match(NUM);
+
     newTemp(fCode->temp);
     strcpy(fCode->code, fCode->temp);
-    strcpy(fCode->code, "=");
-    strcpy(fCode->code, lexema);
-    strcpy(fCode->code, "\n");
-    return b1;
+    strcat(fCode->code, "=");
+    strcat(fCode->code, lexema);
+    strcat(fCode->code, "\n");
+
+    return token;
   }
-  else
-  {
-    return false;
-  }
+  return false;
 }
 
 //--------------------- MAIN -----------------------
