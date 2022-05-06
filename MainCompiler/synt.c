@@ -31,8 +31,10 @@ int match(int token_tag)
  *
  * @return int true/false
  */
-void handleTR(int *lastOperation, type_code *trCode, type_code *tr1Code, type_code *fCode){
-  switch(*lastOperation) {
+void handleTR(int *lastOperation, type_code *trCode, type_code *tr1Code, type_code *fCode)
+{
+  switch(*lastOperation)
+  {
     case '*':
         strcat(trCode->code, trCode->temp);
         strcat(trCode->code, "=");
@@ -63,7 +65,8 @@ void handleTR(int *lastOperation, type_code *trCode, type_code *tr1Code, type_co
  *
  * @return int true/false
  */
-void handleER(int *lastOperation, type_code *erCode, type_code *er1Code, type_code *tCode){
+void handleER(int *lastOperation, type_code *erCode, type_code *er1Code, type_code *tCode)
+{
   switch (*lastOperation)
   {
   case '+':
@@ -132,9 +135,6 @@ int E(type_code *eCode)
     test2 = ER(last_operation, er_code);
   }
 
-  // strcpy(eCode->code, t_code->code);
-  // test2 = ER(last_operation, er_code);
-
   strcpy(eCode->code, t_code->code);
   strcat(eCode->code, er_code->code);
 
@@ -190,9 +190,10 @@ int ER(int *lastOperation, type_code *erCode)
     newTemp(erCode->temp);
 
     b1 = T(tCode);
-    // strcpy(erCode->temp, tCode->temp);
-    if (b1)
-      b2 = ER(lOperation, er1Code);
+
+    if (b1) {
+        b2 = ER(lOperation, er1Code);
+    }
 
     strcpy(erCode->code, tCode->code);
     strcat(erCode->code, er1Code->code);
@@ -201,15 +202,17 @@ int ER(int *lastOperation, type_code *erCode)
     return b1 && b2;
   }
   else if (lookahead->tag == '-') {
+
     int b1, b2;
     match('-');
     *lastOperation = (int) '-';
     newTemp(erCode->temp);
 
     b1 = T(tCode);
-    // strcpy(erCode->temp, tCode->temp);
-    if (b1)
-      b2 = ER(lOperation, er1Code);
+
+    if (b1) {
+        b2 = ER(lOperation, er1Code);
+    }
 
     strcpy(erCode->code, tCode->code);
     strcat(erCode->code, er1Code->code);
@@ -246,8 +249,10 @@ int T(type_code *tCode)
   trCode = (type_code *)malloc(sizeof(type_code));
   
   b1 = F(fCode);
-  if (b1)
+
+  if (b1) {
     b2 = TR(lastOperation, trCode);
+  }
 
   strcpy(tCode->code, fCode->code);
   strcat(tCode->code, trCode->code);
@@ -302,8 +307,7 @@ int TR(int *lastOperation, type_code *trCode)
     newTemp(trCode->temp);
     
     b1 = F(fCode);
-    // strcpy(trCode->temp, fCode->temp);
-   
+
     if (b1){
       b2 = TR(lOperation, tr1Code);
     }
@@ -321,7 +325,6 @@ int TR(int *lastOperation, type_code *trCode)
     newTemp(trCode->temp);
 
     b1 = F(fCode);
-    // strcpy(trCode->temp, fCode->temp);
 
     if (b1){
       b2 = TR(lOperation, tr1Code);
