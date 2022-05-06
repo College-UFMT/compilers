@@ -27,6 +27,70 @@ int match(int token_tag)
 }
 
 /**
+ * @brief Atribui as operações consecutivas de TR
+ *
+ * @return int true/false
+ */
+void handleTR(int *lastOperation, type_code *trCode, type_code *tr1Code, type_code *fCode){
+  switch(*lastOperation) {
+    case '*':
+        strcat(trCode->code, trCode->temp);
+        strcat(trCode->code, "=");
+        strcat(trCode->code, fCode->temp);
+        strcat(trCode->code, "*");
+        strcat(trCode->code, tr1Code->temp);
+        strcat(trCode->code, "\n");
+    break;
+    case '/':
+        strcat(trCode->code, trCode->temp);
+        strcat(trCode->code, "=");
+        strcat(trCode->code, fCode->temp);
+        strcat(trCode->code, "/");
+        strcat(trCode->code, tr1Code->temp);
+        strcat(trCode->code, "\n");
+    break;
+    case '\0':
+        strcat(trCode->code, trCode->temp);
+        strcat(trCode->code, "=");
+        strcat(trCode->code, fCode->temp);
+        strcat(trCode->code, "\n");
+    break;
+  }
+}
+
+/**
+ * @brief Atribui as operações consecutivas de ER
+ *
+ * @return int true/false
+ */
+void handleER(int *lastOperation, type_code *erCode, type_code *er1Code, type_code *tCode){
+  switch (*lastOperation)
+  {
+  case '+':
+    strcat(erCode->code, erCode->temp);
+    strcat(erCode->code, "=");
+    strcat(erCode->code, tCode->temp);
+    strcat(erCode->code, "+");
+    strcat(erCode->code, er1Code->temp);
+    strcat(erCode->code, "\n");
+    break;
+  case '-':
+    strcat(erCode->code, erCode->temp);
+    strcat(erCode->code, "=");
+    strcat(erCode->code, tCode->temp);
+    strcat(erCode->code, "-");
+    strcat(erCode->code, er1Code->temp);
+    strcat(erCode->code, "\n");
+    break;
+  case '\0':
+    strcat(erCode->code, erCode->temp);
+    strcat(erCode->code, "=");
+    strcat(erCode->code, tCode->temp);
+    strcat(erCode->code, "\n");
+    break;
+  }
+}
+/**
  * @brief Regra de derivacao da gramatica: DIGIT
  *
  * @return int true/false
@@ -123,14 +187,16 @@ int ER(int *lastOperation, type_code *erCode)
     int b1, b2;
     match('+');
     *lastOperation = (int)'+';
+    newTemp(erCode->temp);
 
     b1 = T(tCode);
-    strcpy(erCode->temp, tCode->temp);
+    // strcpy(erCode->temp, tCode->temp);
     if (b1)
       b2 = ER(lOperation, er1Code);
 
     strcpy(erCode->code, tCode->code);
     strcat(erCode->code, er1Code->code);
+    handleER(lOperation,erCode,er1Code,tCode);
 
     return b1 && b2;
   }
@@ -138,14 +204,16 @@ int ER(int *lastOperation, type_code *erCode)
     int b1, b2;
     match('-');
     *lastOperation = (int) '-';
+    newTemp(erCode->temp);
 
     b1 = T(tCode);
-    strcpy(erCode->temp, tCode->temp);
+    // strcpy(erCode->temp, tCode->temp);
     if (b1)
       b2 = ER(lOperation, er1Code);
 
     strcpy(erCode->code, tCode->code);
     strcat(erCode->code, er1Code->code);
+    handleER(lOperation,erCode,er1Code,tCode);
 
     return b1 && b2;
   } 
@@ -231,15 +299,18 @@ int TR(int *lastOperation, type_code *trCode)
     int b1, b2;
     match('*');
     *lastOperation = (int)'*';
+    newTemp(trCode->temp);
     
     b1 = F(fCode);
-    strcpy(trCode->temp, fCode->temp);
+    // strcpy(trCode->temp, fCode->temp);
    
-    if (b1)
+    if (b1){
       b2 = TR(lOperation, tr1Code);
+    }
    
     strcat(trCode->code, fCode->code);
     strcat(trCode->code, tr1Code->code);
+    handleTR(lOperation,trCode,tr1Code,fCode);
    
     return b1 && b2;
   }
@@ -247,15 +318,19 @@ int TR(int *lastOperation, type_code *trCode)
     int b1, b2;
     match('/');
     *lastOperation = (int) '/';
+    newTemp(trCode->temp);
 
     b1 = F(fCode);
-    strcpy(trCode->temp, fCode->temp);
+    // strcpy(trCode->temp, fCode->temp);
 
-    if (b1)
+    if (b1){
       b2 = TR(lOperation, tr1Code);
+    }
 
     strcat(trCode->code, fCode->code);
     strcat(trCode->code, tr1Code->code);
+    handleTR(lOperation,trCode,tr1Code,fCode);
+
     return b1 && b2;
   } 
   else if (lookahead->tag == ENDTOKEN || lookahead->tag == '+' || lookahead->tag == '-' || lookahead->tag == OPEN_PAR || lookahead->tag == CLOSE_PAR)

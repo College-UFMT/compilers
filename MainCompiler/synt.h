@@ -30,6 +30,9 @@ int TR(int*,type_code*);
 int F(type_code*);
 int digit();
 int match(int token_tag);
+void handleTR(int *, type_code *, type_code *, type_code *);
+void handleER(int *, type_code *, type_code *, type_code *);
+
 
 int main();
 
