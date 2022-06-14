@@ -1,0 +1,19 @@
+$ bison -d gramatica.y
+$ flex gramflex.l
+$ gcc -c gramatica.tab.c 
+$ gcc -c lex.yy.c 
+$ gcc -o comp lex.yy.o gramatica.tab.o
+
+Assim, a oração (símbolo inicial da gramática) irá derivar em: sujeito predicado
+
+Sujeito irá derivar em: artigo substantivo
+
+Artigo irá derivar em: "a" | "o"
+
+Substantivo irá derivar em: "gato" | "cachorro" | "comida" | "biscoito" 
+
+Predicado irá derivar em: verbo complemento
+
+Verbo irá derivar em: "é" | "come"
+
+Complemento irá derivar em: "bonito" | "feio" | substantivo
