@@ -1,6 +1,6 @@
 /**
  * @file lex.h
- * @author Kaio Felipe Nink Cardoso && Fillipe Augusto de Siqueira Gomes
+ * @author Prof. Ivairton M. Santos
  * @brief Modulo do analisador lexico
  * @version 0.3
  * @date 2022-04-25
@@ -18,8 +18,8 @@
 #include "struct_compiler.h"
 
 //Variaveis globais
-static int pos;
-static char string[MAX_CHAR];
+int pos;
+char string[MAX_CHAR];
 
 // Prototipos
 void initLex();

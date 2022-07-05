@@ -1,6 +1,6 @@
 /**
  * @file synt.h
- * @author Kaio Felipe Nink Cardoso && Fillipe Augusto de Siqueira Gomes
+ * @author Prof. Ivairton M. Santos - UFMT - Computacao
  * @brief Modulo do analisado sintatico
  * @version 0.3
  * @date 2022-04-25
@@ -23,16 +23,13 @@
 type_token *lookahead;
 
 // Prototipos
-int E(type_code*);
-int ER(int*,type_code*);
-int T(type_code*);
-int TR(int*,type_code*);
-int F(type_code*);
+int E();
+int ER();
+int T();
+int TR();
+int F();
 int digit();
 int match(int token_tag);
-void handleTR(int *, type_code *, type_code *, type_code *);
-void handleER(int *, type_code *, type_code *, type_code *);
-
 
 int main();
 

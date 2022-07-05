@@ -1,6 +1,6 @@
 /**
  * @file gen.c
- * @author Kaio Felipe Nink Cardoso && Fillipe Augusto de Siqueira Gomes
+ * @author Ivairton M. Santos - UFMT - Computacao
  * @brief Codificacao do modulo gerador de codigo
  * @version 0.3
  * @date 2022-04-25

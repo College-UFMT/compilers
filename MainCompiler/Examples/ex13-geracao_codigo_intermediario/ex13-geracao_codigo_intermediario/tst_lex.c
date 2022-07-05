@@ -1,6 +1,6 @@
 /**
  * @file tst_lex.c
- * @author Kaio Felipe Nink Cardoso && Fillipe Augusto de Siqueira Gomes
+ * @author Prof. Ivairton M. Santos - UFMT - Computacao
  * @brief Modulo exclusivo para teste do analisador lexico (isolado)
  * @version 0.1
  * @date 2021-11-24

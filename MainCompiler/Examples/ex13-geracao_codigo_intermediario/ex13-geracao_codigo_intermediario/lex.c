@@ -1,6 +1,6 @@
 /**
  * @file lex.c
- * @author Kaio Felipe Nink Cardoso && Fillipe Augusto de Siqueira Gomes
+ * @author Prof. Ivairton M. Santos - UFMT - Computacao
  * @brief Codificacao do modulo do analisador lexico
  * @version 0.3
  * @date 2022-04-25
@@ -17,8 +17,7 @@
  */
 void initLex() {
     printf("Informe uma expressao para ser avaliada:");
-    fgets(string,MAX_CHAR,stdin);
-    // strcpy(string,"4*4-3/1*3");
+    gets(string);
 }
 
 /**
