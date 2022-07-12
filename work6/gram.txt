@@ -1,0 +1,88 @@
+- Declaração de variávei :
+• As variáveis serão todas de escopo global;
+• Serão reconhecidos os tipos “int” e “float”;
+• As variáveis serão declaradas considerando a estrutur : <tipo> <identificador> ;
+Exempl :
+int total ;
+float media ;
+- Escop :
+• O escopo (bloco de comandos) será delimitado pelos símbolos “{“ (abre chaves) e “}”
+(fecha chaves).
+- Comando condiciona :
+• Será válido apenas o comando condicional “if”, bem como sua variação “if/else”.
+Exemplo  :
+if ( <expressão lógica> ) {
+(... comandos ...)
+}
+Exemplo  :
+if ( <expressão lógica> ) {
+Página 2 de 3
+(... comandos ...)
+} else {
+(... comandos ...)
+}
+- Laço de repetiçã :
+• Será válido apenas o comando de laço de repetição “while”.
+Exempl :
+while ( <expressão lógica> ) {
+(... comandos ...)
+}
+- Comandos de leitura/escrit :
+• O comando de leitura de dados para uma variável será o “read” e deverá obedecer ao 
+padrã : read ( <identificador_da_variavel> ) ;
+Exempl :
+read ( idade ) ;
+• O comando de escrita do dado de uma variável no terminal será o “write” e deverá 
+obedecer ao padrã : write ( <identificador_da_variavel> ) ;
+Exempl :
+write ( total ) ;
+- Operadore :
+• Os operadores lógico/relacionais sã : 
+o == (igual)
+o != (diferente)
+o ! (negação)
+o < (menor)
+o <= (menor ou igual)
+o > (maior)
+o >= (maior ou igual)
+• Operador de atribuiçã :
+o = (Exempl : contador = 0 ; )
+• Operadores aritmético :
+o + (soma)
+o - (subtração)
+o * (multiplicação)
+o / (divisão)
+Considere o exemplo a seguir de um código completo de um programa, válido e correto para a 
+linguagem C simplificada especificada (em sua versão 1 :
+float var_x ;
+float var_y ;
+float total ;
+float media ;
+int impar ;
+
+
+programa: declaracoes bloco
+
+declaracoes: declaracao declaracoes | empty
+declaracao: declaracao_inteiro | declaracao_float  
+declaracao_inteiro: INT ID ';' | INT ID = NUM ';'
+declaracao_float: FLOAT ID ';' | FLOAT ID = NUM ';'
+
+bloco: '{' comandos '}'
+comandos: comando comandos | empty
+
+comando: comando_escrita | comando_leitura | comando_atribuicao 
+| comando_se | comando_se_senao | comando_enquanto   
+
+comando_leitura: READ '(' ID ')' ';'
+comando_escrita: WRITE '(' ID ')' ';'
+comando_atribuicao: ID '=' expressao_numerica ';' 
+comando_se: IF '(' expressao_booleana ')' bloco
+comando_se_senao: IF '(' expressao_booleana ')' bloco ELSE bloco
+comando_enquanto: WHILE '(' expressao_booleana ')' bloco 
+
+expressao_numerica: termo | expressao_numerica '+' termo | expressao_numerica '-' termo
+termo:  termo '*' fator | termo '/' fator | termo '%' fator | fator
+fator: NUM | ID | '(' expressao_numerica ')'
+
+expressao_booleana: ID operador_relacional expressao_numerica
