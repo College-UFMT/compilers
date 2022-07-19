@@ -25,13 +25,13 @@
 
 
 %type <c> programa declaracoes declaracao bloco
-%type <c> declaracao_inteiro declaracao_float
+%type <c> declaracao_inteiro declaracao_float declaracao_string
 %type <c> comandos comando comando_escrita comando_leitura comando_atribuicao
 %type <c> expressao_numerica termo fator
 %type <c> expressao_booleana operador_relacional
 %type <c> comando_se comando_se_senao comando_enquanto
 
-%token <c> ID NUM LITERAL_STR INT FLOAT STR WRITE READ WRITELN IF THEN ELSE WHILE DO
+%token <c> ID NUM TEXT INT FLOAT STR WRITE READ WRITELN IF THEN ELSE WHILE DO
 %token <c> LE GE EQ NE
 
 %left '+' '-'
@@ -63,6 +63,8 @@ declaracoes: declaracao declaracoes  {
 
 declaracao: declaracao_inteiro { strcpy($$.str, $1.str); }
 	| declaracao_float { strcpy($$.str, $1.str); }
+	| declaracao_string { strcpy($$.str, $1.str); }
+
 ;
 
 
@@ -90,6 +92,19 @@ declaracao_float:  FLOAT ID '=' NUM ';'  {
 
 		addSymTable(&table, $2.str, REAL, NULL);
 		makeCodeDeclaration($$.str, $2.str, REAL, NULL);
+	}
+;
+
+declaracao_string:  STR ID '=' TEXT ';'  {
+
+		addSymTable(&table, $2.str, STRING, $4.str);
+		makeCodeDeclaration($$.str, $2.str, STRING, $4.str);
+	}
+
+	|  STR ID ';'  {
+
+		addSymTable(&table, $2.str, STRING, NULL);
+		makeCodeDeclaration($$.str, $2.str, STRING, NULL);
 	}
 ;
 

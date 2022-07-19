@@ -23,4 +23,4 @@ symbolTable.o:
 	gcc -c libs/symbolTable.c
 
 clean: 
-	rm *.o *.tab.c *.tab.h *.yy.c comp
+	rm *.o *.tab.c *.tab.h *.yy.c *.asm comp

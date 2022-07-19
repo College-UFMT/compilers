@@ -23,12 +23,6 @@ int hashFunction(int max_size, char* key)
 
     // Metodo do resto da divisao
 	return sum % max_size;
-    
-	// Metodo multiplicativo
-	// double a = 0.6180339887; //constante de Knuth
-	// a *= sum;
-	// a = a - (int) a;
-	// return (int)(a * max_size);
 	
 }
 
@@ -166,48 +160,6 @@ SymTableEntry* findSymTable(SymTable* table, char* identifier)
         return &aux->data;
 }
 
-
-// //Função que realiza a remocao de um valor especifico
-// int retiraValor( SymTableNode tabHash[],int valor,int qualHash){
-
-//     int pos = funcaoHash(valor,qualHash); /*descobrindo a posicao do 
-//     valor onde deseja remover*/
-
-//     SymTableNode *aux;
-//     aux =  (SymTableNode *) (tabHash[pos].next);
-
-//     SymTableNode *auxAnt;
-//     auxAnt = &(tabHash[pos]);
-//     if (valor == auxAnt->dados.numero)
-//     {
-//     	if (aux != NULL )
-//     	{
-//     		*auxAnt = *aux;
-//     		free(aux);
-//     	}else
-//     	{
-//     		auxAnt->dados.numero = -1;
-//     		auxAnt->next = NULL;
-//     	}
-//     	return 1;
-//     }
-//     while ( (aux != NULL) && (aux->dados.numero != valor) ){
-//             auxAnt = aux;
-//             aux = aux->next;
-//     }
-//     //Ele ira para por nao ter chegado em nulo e nao ter encontrado.
-//     if (aux == NULL)
-//         return 0;
-//     else
-//     { // ou se encontro:
-//         auxAnt->next = aux->next;
-//     	free(aux);
-//         return 1; //retorna 1(verdadeiro) como encontrado.
-//     }
-// }
-
-
-
 void freeSymTable(SymTable* table)
 {
 	SymTableNode* node;
@@ -235,26 +187,3 @@ void freeSymTable(SymTable* table)
 
 	free(table->array);
 }
-
-
-// //Função que libera toda a mémoria alocada pela tabela e reinicializa ela
-// void liberaTabela(SymTableNode* tab)
-// {
-//     SymTableNode* p,* ant;
-//     int i;
-    
-//     for (i = 0; i < TAMTABELA; i++)
-//     {
-//         p = tab[i].next;
-//         while (p != NULL)
-//         {
-//             ant = p;
-//             p = p->next;
-//             free(ant);
-//         }
-
-//         tab[i].dados.numero = -1;
-//         tab[i].next = NULL;
-//     }
-// }
-

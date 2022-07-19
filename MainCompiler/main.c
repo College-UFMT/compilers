@@ -90,7 +90,8 @@ int main(int argc, char const *argv[])
     fprintf(out_file, "ret\n");
 
 
-    printSymTable(&table);
+    // printSymTable(&table);
+    printf("Compile success!");
 
     fclose(out_file);
     fclose(stdin);

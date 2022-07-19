@@ -46,16 +46,20 @@ void makeCodeDeclaration(char* dest, char* identifier, Type type, char* value)
             sprintf(dest, "%s: dq %f\n", identifier, x);
         }
     }
-
     else if (type == STRING)
     {
     	if (value == NULL)
-            sprintf(dest, "%s: times %d db 0 \n", identifier, STRING_SIZE);
+            sprintf(dest, "%s: db 0\n", identifier);
 
         else
         {
-            sprintf(dest, "%s: db %s, 0\n", identifier, value);
+          	char* x = value;
+            sprintf(dest, "%s: db %s,0\n", identifier, x);
         }
+    }
+
+    else {
+    	fprintf(stderr, "Unsuported variable type at line %d", cont_lines);
     }
 }
 
@@ -73,7 +77,6 @@ void dumpCodeDeclarationEnd()
 int makeCodeRead(char* dest, char *id)
 {
     SymTableEntry* ret = findSymTable(&table,id);
-    
     dest[0] = '\0';
 
     if (ret == NULL)
@@ -81,8 +84,9 @@ int makeCodeRead(char* dest, char *id)
         fprintf(stderr, "Error: %s not recognized at line %d\n", id, cont_lines);
         return 0;
     }
+    printf("%s",ret->value);
 
-    sprintf(dest + strlen(dest), "#Funcao read\n");
+    sprintf(dest + strlen(dest), "#Funcao read()\n");
     if (ret->type == INTEGER)
     {
         sprintf(dest + strlen(dest), "mov rdi,fmt_d\n");
@@ -122,7 +126,7 @@ int makeCodeWrite(char* dest, char *id, int ln)
         fprintf(stderr, "Error: %s not recognized at line %d\n", id, cont_lines);
         return 0;
     }
-    sprintf(dest + strlen(dest), "#Funcao print\n");
+    sprintf(dest + strlen(dest), "#Funcao write()\n");
     if (ret->type == INTEGER)
     {
         if (ln) sprintf(dest + strlen(dest), "mov rdi,fmt_dln\n");
@@ -164,14 +168,18 @@ int makeCodeAssignment(char* dest, char* id, char* expr)
     }
 
 
-    sprintf(dest + strlen(dest), "#Codigo atribuicao\n");
     if (ret->type == INTEGER)
     {
         sprintf(dest + strlen(dest), "%s", expr);
         sprintf(dest + strlen(dest), "pop rbx\n");
         sprintf(dest + strlen(dest), "mov [%s],rbx\n", ret->identifier);
     }
-
+    else if (ret->type == REAL)
+      {
+          sprintf(dest + strlen(dest), "%s", expr);
+          sprintf(dest + strlen(dest), "pop rbx\n");
+          sprintf(dest + strlen(dest), "mov [%s],rbx\n", ret->identifier);
+      }
     else
     {
         fprintf(stderr, "Unsuported operation at line %d\n",
@@ -181,9 +189,6 @@ int makeCodeAssignment(char* dest, char* id, char* expr)
 
     return 1;
 }
-
-
-
 
 
 int makeCodeLoad(char* dest, char* id, int ref)
@@ -204,12 +209,8 @@ int makeCodeLoad(char* dest, char* id, int ref)
         fprintf(stderr, "Error: %s not recognized at line %d\n", id, cont_lines);
         return 0;
     }
-
-    if (ret->type == STRING)
-        sprintf(dest + strlen(dest), "mov rbx,%s\n", ret->identifier);
-    else
-        sprintf(dest + strlen(dest), "mov rbx,[%s]\n", ret->identifier);
     
+    sprintf(dest + strlen(dest), "mov rbx,[%s]\n", ret->identifier);
     sprintf(dest + strlen(dest), "push rbx\n");
     return 1;
 }
@@ -217,7 +218,7 @@ int makeCodeLoad(char* dest, char* id, int ref)
 
 void makeCodeAdd(char* dest, char* value)
 {
-    sprintf(dest + strlen(dest), "#Codigo soma\n");
+    sprintf(dest + strlen(dest), "#Codigo de soma\n");
     sprintf(dest + strlen(dest), "%s", value);
     sprintf(dest + strlen(dest), "pop rcx\n");
     sprintf(dest + strlen(dest), "pop rbx\n");
@@ -228,7 +229,7 @@ void makeCodeAdd(char* dest, char* value)
 
 void makeCodeSub(char* dest, char* value)
 {   
-    sprintf(dest + strlen(dest), "#Codigo subtracao\n");
+    sprintf(dest + strlen(dest), "#Codigo de subtracao\n");
     sprintf(dest + strlen(dest), "%s", value);
     sprintf(dest + strlen(dest), "pop rcx\n");
     sprintf(dest + strlen(dest), "pop rbx\n");
@@ -239,7 +240,7 @@ void makeCodeSub(char* dest, char* value)
 
 void makeCodeMul(char* dest, char* value2)
 {
-    sprintf(dest + strlen(dest), "#Codigo multiplicacao\n");
+    sprintf(dest + strlen(dest), "#Codigo de multiplicacao\n");
     sprintf(dest + strlen(dest), "%s", value2);
     sprintf(dest + strlen(dest), "pop rcx\npop rbx\nimul rbx,rcx\npush rbx\n");
 }
@@ -247,7 +248,7 @@ void makeCodeMul(char* dest, char* value2)
 
 void makeCodeDiv(char* dest, char* value2)
 {
-    sprintf(dest + strlen(dest), "#Codigo divisao\n");
+    sprintf(dest + strlen(dest), "#Codigo de divisao\n");
     sprintf(dest + strlen(dest), "%s", value2);
     sprintf(dest + strlen(dest), "pop r8\n");
     sprintf(dest + strlen(dest), "pop rax\n");
@@ -259,7 +260,7 @@ void makeCodeDiv(char* dest, char* value2)
 
 void makeCodeMod(char* dest, char* value2)
 {
-    sprintf(dest + strlen(dest), "#Codigo modulo\n");
+    sprintf(dest + strlen(dest), "#Codigo de resto da divisão\n");
     sprintf(dest + strlen(dest), "%s", value2);
     sprintf(dest + strlen(dest), "pop r8\n");
     sprintf(dest + strlen(dest), "pop rax\n");
@@ -280,13 +281,12 @@ int makeCodeComp(char* dest, char* id, char* expr)
         return 0;
     }
 
-    if (ret->type != INTEGER)
+    if (ret->type != INTEGER && ret->type != REAL)
     {
         fprintf(stderr, "Unsuported operation at line %d\n",
             cont_lines);
         return 0;
     }
-
     sprintf(dest + strlen(dest), "%s", expr);
     sprintf(dest + strlen(dest), "pop rcx\n");
     sprintf(dest + strlen(dest), "mov rbx, [%s]\n", ret->identifier);
@@ -303,6 +303,7 @@ void makeCodeIf(char* dest, char* expr_code, int expr_jump, char* block_code)
 
     dest[0] = '\0';
 
+    sprintf(dest + strlen(dest), "#Comando if\n");
     sprintf(dest + strlen(dest), "%s", expr_code);
     sprintf(dest + strlen(dest), "%s %s\n", jumps[expr_jump + JUMPS_ARRAY_OFFSET],
         label);
@@ -322,7 +323,7 @@ void makeCodeIfElse(char* dest, char* expr_code, int expr_jump,
 
     dest[0] = '\0';
 
-    
+    sprintf(dest + strlen(dest), "#Comando if-else\n");
     sprintf(dest + strlen(dest), "%s", expr_code);
     sprintf(dest + strlen(dest), "%s %s\n", jumps[expr_jump + JUMPS_ARRAY_OFFSET],
         else_label);
@@ -344,7 +345,7 @@ void makeCodeWhile(char* dest, char* expr_code, int expr_jump, char* block_code)
 
     dest[0] = '\0';
 
-    
+    sprintf(dest + strlen(dest), "#Comando while\n");
     sprintf(dest + strlen(dest), "%s:\n", loop_label);
     sprintf(dest + strlen(dest), "%s", expr_code);
     sprintf(dest + strlen(dest), "%s %s\n", jumps[expr_jump + JUMPS_ARRAY_OFFSET],

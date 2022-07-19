@@ -22,83 +22,95 @@ digit [0-9]
 }
 
 "int"	{
-	printf("Lexic: int found\n");
+	// printf("Lexic: int found\n");
 	strcpy(yylval.c.str, yytext);
 	return INT;
 }
 
 "float"	{
-	printf("Lexic: int found\n");
+	// printf("Lexic: int found\n");
 	strcpy(yylval.c.str, yytext);
 	return FLOAT;
 }
 
+"string"	{
+	// printf("Lexic: int found\n");
+	strcpy(yylval.c.str, yytext);
+	return STR;
+}
+
 "read"	{
-	printf("Lexic: int found\n");
+	// printf("Lexic: int found\n");
 	strcpy(yylval.c.str, yytext);
 	return READ;
 }
 
 "write"	{
-	printf("Lexic: int found\n");
+	// printf("Lexic: int found\n");
 	strcpy(yylval.c.str, yytext);
 	return WRITE;
 }
 
 "if"	{
-	printf("Lexic: int found\n");
+	// printf("Lexic: int found\n");
 	strcpy(yylval.c.str, yytext);
 	return IF;
 }
 
 "else"	{
-	printf("Lexic: int found\n");
+	// printf("Lexic: int found\n");
 	strcpy(yylval.c.str, yytext);
 	return ELSE;
 }
 
 "while"	{
-	printf("Lexic: int found\n");
+	// printf("Lexic: int found\n");
 	strcpy(yylval.c.str, yytext);
 	return WHILE;
 }
 
 "<="	{
-	printf("Lexic: int found\n");
+	// printf("Lexic: int found\n");
 	strcpy(yylval.c.str, yytext);
 	return LE;
 }
 ">="	{
-	printf("Lexic: int found\n");
+	// printf("Lexic: int found\n");
 	strcpy(yylval.c.str, yytext);
 	return GE;
 }
 "=="	{
-	printf("Lexic: int found\n");
+	// printf("Lexic: int found\n");
 	strcpy(yylval.c.str, yytext);
 	return EQ;
 }
 "!="	{
-	printf("Lexic: int found\n");
+	// printf("Lexic: int found\n");
 	strcpy(yylval.c.str, yytext);
 	return NE;
 }
 
-{digit}+  {
+({digit}*[.])?{digit}+  {
 	strcpy(yylval.c.str, yytext);
+  // printf("Num: %d\n",NUM);
 	return NUM;
 }
 
 
 {letter}({letter}|{digit}|_)*	{
-	printf("Lexic: %s found\n", yytext);
+	// printf("Lexic: %s found\n", yytext);
 	strcpy(yylval.c.str, yytext);
 	return ID;
 }
 
+["]({letter}|{digit}|_)*["]	{
+	// printf("Lexic: %s found\n", yytext);
+	strcpy(yylval.c.str, yytext);
+	return TEXT;
+}
 
 [-;:={}+*()<>/%] {
-	printf("Lexic: %c found\n", *yytext);
+	// printf("Lexic: %c found\n", *yytext);
 	// strcpy(yylval.str, yytext);
 	return *yytext;
 }
